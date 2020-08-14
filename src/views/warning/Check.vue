@@ -2,26 +2,29 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="12" :sm="24">
-              <a-form-item label="时间范围">
-                <a-range-picker show-time v-model="queryParam.startdate" style="width: 100%" placeholder="请输入开始时间"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-              </span>
-            </a-col>
-            <a-col :md="4" :sm="24">
-              <span class="table-page-search-submitButtons" style="float: right">
-                <a-button type="primary" icon="plus" @click="handleAdd">导出</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
+        <a-row :gutter="24" type="flex" justify="space-between">
+          <a-col :md="18" :sm="24">
+            <a-form-model layout="inline" :model="queryParam">
+              <a-form-model-item :colon="false">
+                <a-select :default-value="columns[0].dataIndex" slot="label">
+                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                </a-select>
+                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
+              </a-form-model-item>
+              <a-form-model-item>
+                <span class="table-page-search-btns">
+                  <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                </span>
+              </a-form-model-item>
+            </a-form-model>
+          </a-col>
+          <a-col :md="6" :sm="24">
+            <span class="table-page-search-btns" style="float: right">
+              <a-button type="primary" icon="plus" @click="handleAdd">导出</a-button>
+            </span>
+          </a-col>
+        </a-row>
       </div>
 
       <s-table

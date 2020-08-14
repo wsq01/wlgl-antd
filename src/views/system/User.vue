@@ -1,28 +1,30 @@
 <template>
-  <!-- <page-header-wrapper> -->
+  <page-header-wrapper :title="false">
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="部门名称">
-                <a-input v-model="queryParam.gongsimingcheng" placeholder="" />
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-              </span>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons" style="float: right">
-                <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-                <a-button style="margin-left: 8px" v-if="selectedRowKeys.length > 0">批量删除</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
+        <a-row :gutter="24" type="flex" justify="space-between">
+          <a-col :md="18" :sm="24">
+            <a-form-model layout="inline" :model="queryParam">
+              <a-form-model-item :colon="false">
+                <a-select :default-value="columns[0].dataIndex" slot="label">
+                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                </a-select>
+                <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
+              </a-form-model-item>
+              <a-form-model-item>
+                <span class="table-page-search-btns">
+                  <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                </span>
+              </a-form-model-item>
+            </a-form-model>
+          </a-col>
+          <a-col :md="6" :sm="24">
+            <span class="table-page-search-btns" style="float: right">
+              <a-button type="primary" icon="plus" @click="handleAdd">新增</a-button>
+            </span>
+          </a-col>
+        </a-row>
       </div>
 
       <s-table
@@ -46,14 +48,13 @@
         </span>
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
+            <a-button size="small" type="danger" @click="handleSub(record)" class="table-action-btn">删除</a-button>
           </template>
         </span>
       </s-table>
     </a-card>
-  <!-- </page-header-wrapper> -->
+  </page-header-wrapper>
 </template>
 
 <script>
@@ -75,7 +76,7 @@ const columns = [
     title: '所属机构',
     dataIndex: 'suoshujigou',
     align: 'center',
-    width: 90
+    width: 120
   },
   {
     title: '机构名称',
@@ -94,7 +95,7 @@ const columns = [
     title: '手机号',
     dataIndex: 'admin_mobile',
     align: 'center',
-    width: 120
+    width: 150
   },
   {
     title: '状态',
@@ -119,7 +120,7 @@ const columns = [
   {
     title: '操作',
     dataIndex: 'action',
-    width: '150px',
+    width: 160,
     align: 'center',
     scopedSlots: { customRender: 'action' }
   }
@@ -138,12 +139,15 @@ export default {
             resolve({
               data: [{
                 id: 1,
-                admin_user: 'xxxx',
-                admin_real_name: '2222',
+                admin_user: '500353',
+                admin_real_name: '500353',
                 shifoukeyong: 1,
-                updatedAt: '2018-07-26 00:00:00'
-              }
-              ],
+                suoshujigou: '000380003',
+                jigoumingcheng: '500361',
+                admin_mailbox: '',
+                admin_mobile: '15532879918',
+                createtime: '2019-08-07 09:51:23'
+              }],
               pageSize: 10,
               pageNo: 0,
               totalPage: 1,

@@ -1,28 +1,31 @@
 <template>
-  <!-- <page-header-wrapper> -->
+  <page-header-wrapper :title="false">
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="部门名称">
-                <a-input v-model="queryParam.gongsimingcheng" placeholder="" />
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-              </span>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons" style="float: right">
-                <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-                <a-button style="margin-left: 8px" v-if="selectedRowKeys.length > 0">批量删除</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
+        <a-row :gutter="24" type="flex" justify="space-between">
+          <a-col :md="18" :sm="24">
+            <a-form-model layout="inline" :model="queryParam">
+              <a-form-model-item :colon="false">
+                <a-select :default-value="columns[0].dataIndex" slot="label">
+                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                </a-select>
+                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
+              </a-form-model-item>
+              <a-form-model-item>
+                <span class="table-page-search-btns">
+                  <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                </span>
+              </a-form-model-item>
+            </a-form-model>
+          </a-col>
+          <a-col :md="6" :sm="24">
+            <span class="table-page-search-btns" style="float: right">
+              <a-button type="primary" icon="plus" @click="handleAdd">导出</a-button>
+              <a-button style="margin-left: 8px" type="primary" icon="plus" @click="handleAdd">新增</a-button>
+            </span>
+          </a-col>
+        </a-row>
       </div>
 
       <s-table
@@ -47,7 +50,7 @@
         </span>
       </s-table>
     </a-card>
-  <!-- </page-header-wrapper> -->
+  </page-header-wrapper>
 </template>
 
 <script>

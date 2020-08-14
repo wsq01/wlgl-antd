@@ -102,6 +102,8 @@ export default {
           return '其他设置'
         case 'app.setting.weakmode':
           return '弱模式'
+        default:
+          return e
       }
     },
     handleMediaQuery (val) {

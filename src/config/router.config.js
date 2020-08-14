@@ -13,7 +13,7 @@ export const asyncRouterMap = [
     component: BasicLayout,
     redirect: '/dashboard',
     meta: {
-      title: 'menu.home'
+      title: '首页'
     },
     children: [
       {
@@ -43,8 +43,8 @@ export const asyncRouterMap = [
             component: () => import('@/views/system/Department')
           },
           {
-            path: '/system/user',
-            name: 'user',
+            path: '/system/suser',
+            name: 'suser',
             meta: {
               title: '用户管理'
             },
@@ -187,6 +187,7 @@ export const asyncRouterMap = [
         redirect: '/warning/check',
         meta: {
           title: '预警管理',
+          breadcrumbName: '预警管理',
           icon: 'warning'
         },
         children: [
@@ -194,7 +195,8 @@ export const asyncRouterMap = [
             path: '/warning/check',
             name: 'check',
             meta: {
-              title: '预警信息查询'
+              title: '预警信息查询',
+              breadcrumbName: '预警信息查询'
             },
             component: () => import('@/views/warning/Check')
           },
@@ -237,10 +239,11 @@ export const constantRouterMap = [
     path: '/user',
     component: UserLayout,
     redirect: '/user/login',
+    name: 'user',
     hidden: true,
     children: [
       {
-        path: 'login',
+        path: '/user/login',
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       }
