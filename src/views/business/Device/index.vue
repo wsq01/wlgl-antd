@@ -7,7 +7,9 @@
             <a-form-model layout="inline" :model="queryParam">
               <a-form-model-item :colon="false">
                 <a-select :default-value="columns[0].dataIndex" slot="label">
-                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  <template v-for="(item, index) in columns">
+                    <a-select-option v-if="index === 0 || index === 1 || index === 2" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  </template>
                 </a-select>
                 <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
               </a-form-model-item>
@@ -19,17 +21,17 @@
                 </a-radio-group>
               </a-form-model-item>
               <a-form-model-item>
-                <span class="table-page-search-btns">
+                <a-space>
                   <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button class="btn-right" @click="() => this.queryParam = {}">重置</a-button>
-                </span>
+                  <a-button @click="() => this.queryParam = {}">重置</a-button>
+                </a-space>
               </a-form-model-item>
             </a-form-model>
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-btns" style="float: right">
               <a-button type="primary" icon="plus" @click="handleAdd">新增</a-button>
-              <a-button v-if="selectedRowKeys.length > 0" class="btn-right" type="primary" icon="plus" @click="handleAdd">批量删除</a-button>
+              <a-button v-if="selectedRowKeys.length > 0" type="primary" icon="plus" @click="handleAdd">批量删除</a-button>
             </span>
           </a-col>
         </a-row>

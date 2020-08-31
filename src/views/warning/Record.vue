@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper>
+  <page-header-wrapper :title="false">
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
         <a-row :gutter="24" type="flex" justify="space-between">
@@ -7,7 +7,9 @@
             <a-form-model layout="inline" :model="queryParam">
               <a-form-model-item :colon="false">
                 <a-select :default-value="columns[0].dataIndex" slot="label">
-                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  <template v-for="(item, index) in columns">
+                    <a-select-option v-if="index === 0" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  </template>
                 </a-select>
                 <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
               </a-form-model-item>
@@ -49,34 +51,33 @@ import STable from '@/components/Table'
 const columns = [
   {
     title: '设备编号',
-    dataIndex: 'gongsimingcheng',
+    dataIndex: 'shebeibianhao',
     align: 'center',
-    width: 150
+    width: 120
   },
   {
     title: '操作人',
-    dataIndex: 'number',
+    dataIndex: 'yonghuming',
     align: 'center',
     width: 120
   },
   {
     title: '操作内容',
-    dataIndex: 'kehuleixing',
+    dataIndex: 'caozuoneirong',
     align: 'center',
     width: 90
   },
   {
     title: '预警类型',
-    dataIndex: 'duanxinbaojing',
+    dataIndex: 'yujingneixing',
     align: 'center',
-    width: 100,
-    scopedSlots: { customRender: 'duanxinbaojing' }
+    width: 100
   },
   {
     title: '操作时间',
-    dataIndex: 'duanxingshengyushuliang',
+    dataIndex: 'createtime',
     align: 'center',
-    width: 120
+    width: 140
   }
 ]
 
@@ -93,10 +94,11 @@ export default {
             resolve({
               data: [{
                 id: 1,
-                gongsimingcheng: 'xxxx',
-                number: '2222',
-                beizhu: '那是一种内在的东西， 他们到达不了，也无法触及的',
-                updatedAt: '2018-07-26 00:00:00'
+                shebeibianhao: '514593',
+                yonghuming: 'zhongbaowuliu',
+                caozuoneirong: '',
+                yujingneixing: '超高温报警',
+                createtime: '2020-07-21 14:56:36'
               }
               ],
               pageSize: 10,

@@ -68,7 +68,7 @@ export const asyncRouterMap = [
             meta: {
               title: '设备管理'
             },
-            component: () => import('@/views/business/Device')
+            component: () => import('@/views/business/Device/index')
           },
           {
             path: '/business/transportation',
@@ -76,7 +76,7 @@ export const asyncRouterMap = [
             meta: {
               title: '运输管理'
             },
-            component: () => import('@/views/business/Transportation')
+            component: () => import('@/views/business/Transportation/index')
           },
           {
             path: '/business/Productname',

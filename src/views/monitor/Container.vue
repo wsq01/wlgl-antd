@@ -13,9 +13,9 @@
               <a-input v-model="queryParam.number"></a-input>
             </a-form-model-item>
             <a-form-model-item>
-              <span class="table-page-search-btns">
+              <a-space>
                 <a-button type="primary" @click="handleSearch">查询</a-button>
-              </span>
+              </a-space>
             </a-form-model-item>
           </a-form-model>
         </a-col>

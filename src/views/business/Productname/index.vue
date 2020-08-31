@@ -11,19 +11,19 @@
                     <a-select-option v-if="index === 0 || index === 1" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
                   </template>
                 </a-select>
-                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
+                <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
               </a-form-model-item>
               <a-form-model-item>
-                <span class="table-page-search-btns">
+                <a-space>
                   <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                </span>
+                  <a-button @click="() => this.queryParam = {}">重置</a-button>
+                </a-space>
               </a-form-model-item>
             </a-form-model>
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-btns" style="float: right">
-              <a-button style="margin-left: 8px" type="primary" icon="plus" @click="handleAdd">新增</a-button>
+              <a-button type="primary" icon="plus" @click="handleAdd">新增</a-button>
             </span>
           </a-col>
         </a-row>

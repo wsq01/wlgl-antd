@@ -148,7 +148,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .bm-view {
   width: 100%;
   height: calc(100vh - 216px);

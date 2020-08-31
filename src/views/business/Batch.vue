@@ -7,15 +7,17 @@
             <a-form-model layout="inline" :model="queryParam">
               <a-form-model-item :colon="false">
                 <a-select :default-value="columns[0].dataIndex" slot="label">
-                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  <template v-for="(item, index) in columns">
+                    <a-select-option v-if="index === 0 || index === 1 || index === 2" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  </template>
                 </a-select>
-                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
+                <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
               </a-form-model-item>
               <a-form-model-item>
-                <span class="table-page-search-btns">
+                <a-space>
                   <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
                   <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                </span>
+                </a-space>
               </a-form-model-item>
             </a-form-model>
           </a-col>

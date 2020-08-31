@@ -7,15 +7,20 @@
             <a-form-model layout="inline" :model="queryParam">
               <a-form-model-item :colon="false">
                 <a-select :default-value="columns[0].dataIndex" slot="label">
-                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  <template v-for="(item, index) in columns">
+                    <a-select-option v-if="index === 0 || index === 1 || index === 2" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  </template>
                 </a-select>
-                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
+                <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
+              </a-form-model-item>
+              <a-form-model-item label="时间范围">
+                <a-range-picker :show-time="true" />
               </a-form-model-item>
               <a-form-model-item>
-                <span class="table-page-search-btns">
+                <a-space>
                   <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                </span>
+                  <a-button @click="() => this.queryParam = {}">重置</a-button>
+                </a-space>
               </a-form-model-item>
             </a-form-model>
           </a-col>
@@ -36,16 +41,6 @@
         :bordered="true"
         :alert="false"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="action" slot-scope="text, record">
-          <template>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
-          </template>
-        </span>
       </s-table>
     </a-card>
   </page-header-wrapper>
@@ -56,34 +51,33 @@ import STable from '@/components/Table'
 const columns = [
   {
     title: '文件编号',
-    dataIndex: 'gongsimingcheng',
+    dataIndex: 'id',
     align: 'center',
-    width: 150
+    width: 90
   },
   {
     title: '设备编号',
-    dataIndex: 'number',
+    dataIndex: 'shebeibianhao',
     align: 'center',
     width: 120
   },
   {
     title: '运单编号',
-    dataIndex: 'kehuleixing',
+    dataIndex: 'yundanhao',
     align: 'center',
     width: 90
   },
   {
     title: '下载地址',
-    dataIndex: 'duanxinbaojing',
+    dataIndex: 'url',
     align: 'center',
-    width: 100,
-    scopedSlots: { customRender: 'duanxinbaojing' }
+    width: 100
   },
   {
     title: '操作时间',
-    dataIndex: 'duanxingshengyushuliang',
+    dataIndex: 'time',
     align: 'center',
-    width: 120
+    width: 140
   }
 ]
 

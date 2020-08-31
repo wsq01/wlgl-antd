@@ -14,17 +14,17 @@
                 <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
               </a-form-model-item>
               <a-form-model-item>
-                <span class="table-page-search-btns">
+                <a-space>
                   <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button class="btn-right" @click="() => this.queryParam = {}">重置</a-button>
-                </span>
+                  <a-button @click="() => this.queryParam = {}">重置</a-button>
+                </a-space>
               </a-form-model-item>
             </a-form-model>
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-btns" style="float: right">
-              <a-button class="btn-right" type="primary" icon="plus" @click="handleAdd">新增</a-button>
-              <a-button v-if="selectedRowKeys.length > 0" class="btn-right" type="primary" icon="plus" @click="handleAdd">批量删除</a-button>
+              <a-button type="primary" icon="plus" @click="handleAdd">新增</a-button>
+              <a-button v-if="selectedRowKeys.length > 0" type="primary" icon="plus" @click="handleAdd">批量删除</a-button>
             </span>
           </a-col>
         </a-row>
@@ -48,12 +48,12 @@
           {{ index + 1 }}
         </span>
         <span slot="action" slot-scope="text, record">
-          <template>
-            <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
+          <a-space>
+            <a-button size="small" type="primary" @click="handleEdit(record)">编辑</a-button>
             <a-popconfirm title="确定要删除吗？" @confirm="handleDelete(record)">
-              <a-button size="small" type="danger" class="table-action-btn">删除</a-button>
+              <a-button size="small" type="danger">删除</a-button>
             </a-popconfirm>
-          </template>
+          </a-space>
         </span>
       </s-table>
     </a-card>
