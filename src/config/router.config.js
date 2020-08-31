@@ -40,7 +40,7 @@ export const asyncRouterMap = [
             meta: {
               title: '部门管理'
             },
-            component: () => import('@/views/system/Department')
+            component: () => import('@/views/system/Department/index')
           },
           {
             path: '/system/suser',
@@ -48,7 +48,7 @@ export const asyncRouterMap = [
             meta: {
               title: '用户管理'
             },
-            component: () => import('@/views/system/User')
+            component: () => import('@/views/system/User/index')
           }
         ]
       },
@@ -84,7 +84,7 @@ export const asyncRouterMap = [
             meta: {
               title: '品名维护'
             },
-            component: () => import('@/views/business/Productname')
+            component: () => import('@/views/business/Productname/index')
           },
           {
             path: '/business/consignment',
@@ -92,7 +92,7 @@ export const asyncRouterMap = [
             meta: {
               title: '发货单位'
             },
-            component: () => import('@/views/business/Consignment')
+            component: () => import('@/views/business/Consignment/index')
           },
           {
             path: '/business/sign',
@@ -100,7 +100,7 @@ export const asyncRouterMap = [
             meta: {
               title: '签收单位'
             },
-            component: () => import('@/views/business/Sign')
+            component: () => import('@/views/business/Sign/index')
           },
           {
             path: '/business/store',
@@ -229,6 +229,11 @@ export const asyncRouterMap = [
             component: () => import('@/views/history/Download')
           }
         ]
+      },
+      {
+        path: 'http://www.ccsc58.cc/wlgl/wkpt/index.php',
+        name: 'outweb',
+        meta: { title: '大屏展示', target: '_blank', icon: 'fund' }
       }
     ]
   }

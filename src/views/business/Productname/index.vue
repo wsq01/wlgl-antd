@@ -7,9 +7,11 @@
             <a-form-model layout="inline" :model="queryParam">
               <a-form-model-item :colon="false">
                 <a-select :default-value="columns[0].dataIndex" slot="label">
-                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  <template v-for="(item, index) in columns">
+                    <a-select-option v-if="index === 0 || index === 1" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  </template>
                 </a-select>
-                <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
+                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
               </a-form-model-item>
               <a-form-model-item>
                 <span class="table-page-search-btns">
@@ -21,7 +23,7 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-btns" style="float: right">
-              <a-button type="primary" icon="plus" @click="handleAdd">新增</a-button>
+              <a-button style="margin-left: 8px" type="primary" icon="plus" @click="handleAdd">新增</a-button>
             </span>
           </a-col>
         </a-row>
@@ -37,90 +39,78 @@
         :alert="false"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="status" slot-scope="text">
-          {{ text | statusFilter }}
-        </span>
-        <span slot="check">
-          <a href="#">详情</a>
-        </span>
         <span slot="action" slot-scope="text, record">
           <template>
             <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
-            <a-button size="small" type="danger" @click="handleSub(record)" class="table-action-btn">删除</a-button>
+            <a-popconfirm title="确定要删除吗？" @confirm="handleDelete(record)">
+              <a-button size="small" type="danger" class="table-action-btn">删除</a-button>
+            </a-popconfirm>
           </template>
         </span>
       </s-table>
     </a-card>
+    <a-modal v-model="isShowAddModal" title="添加">
+      <add-form></add-form>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
 import STable from '@/components/Table'
+import AddForm from './add'
 const columns = [
   {
-    title: '登录名',
-    dataIndex: 'admin_user',
+    title: '编号',
+    dataIndex: 'bianhao',
     align: 'center',
-    width: 150
+    width: 80
   },
   {
-    title: '用户名称',
-    dataIndex: 'admin_real_name',
+    title: '品名',
+    dataIndex: 'pinming',
     align: 'center',
-    width: 120
+    width: 80
+  },
+  {
+    title: '规格',
+    dataIndex: 'guige',
+    align: 'center',
+    width: 80
+  },
+  {
+    title: '生产企业',
+    dataIndex: 'shengchanqiye',
+    align: 'center',
+    width: 100
+  },
+  {
+    title: '生产批号',
+    dataIndex: 'shengchanpihao',
+    align: 'center',
+    width: 100
   },
   {
     title: '所属机构',
     dataIndex: 'suoshujigou',
     align: 'center',
-    width: 120
-  },
-  {
-    title: '机构名称',
-    dataIndex: 'jigoumingcheng',
-    align: 'center',
-    width: 100,
-    scopedSlots: { customRender: 'duanxinbaojing' }
-  },
-  {
-    title: '邮箱',
-    dataIndex: 'admin_mailbox',
-    align: 'center',
-    width: 120
-  },
-  {
-    title: '手机号',
-    dataIndex: 'admin_mobile',
-    align: 'center',
-    width: 150
-  },
-  {
-    title: '状态',
-    dataIndex: 'shifoukeyong',
-    align: 'center',
-    width: 60,
-    scopedSlots: { customRender: 'status' }
+    width: 100
   },
   {
     title: '创建时间',
     dataIndex: 'createtime',
     align: 'center',
-    width: 150
+    width: 160
   },
   {
-    title: '短信余量查看',
-    dataIndex: 'check',
+    title: '备注',
+    dataIndex: 'beizhu',
     align: 'center',
-    width: 100,
-    scopedSlots: { customRender: 'check' }
+    width: 100
   },
   {
     title: '操作',
     dataIndex: 'action',
-    width: 160,
+    width: '150px',
     align: 'center',
     scopedSlots: { customRender: 'action' }
   }
@@ -128,26 +118,29 @@ const columns = [
 
 export default {
   components: {
-    STable
+    STable,
+    AddForm
   },
   data () {
     return {
       columns,
+      isShowAddModal: false,
       loadData: parameter => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve({
               data: [{
                 id: 1,
-                admin_user: '500353',
-                admin_real_name: '500353',
-                shifoukeyong: 1,
-                suoshujigou: '000380003',
-                jigoumingcheng: '500361',
-                admin_mailbox: '',
-                admin_mobile: '15532879918',
-                createtime: '2019-08-07 09:51:23'
-              }],
+                bianhao: '1',
+                pinming: '1',
+                guige: '1',
+                shengchanqiye: '1',
+                shengchanpihao: '1',
+                suoshujigou: '000380',
+                createtime: '2018-07-26 00:00:00',
+                beizhu: '1'
+              }
+              ],
               pageSize: 10,
               pageNo: 0,
               totalPage: 1,
@@ -161,19 +154,13 @@ export default {
       selectedRows: []
     }
   },
-  filters: {
-    statusFilter (val) {
-      console.log(val)
-      return val === 1 ? '激活' : '禁止'
-    }
-  },
   methods: {
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
     handleAdd () {
-
+      this.isShowAddModal = true
     }
   }
 }

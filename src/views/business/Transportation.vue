@@ -54,7 +54,9 @@
           <template>
             <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">详情</a-button>
             <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
-            <a-button size="small" type="danger" @click="handleSub(record)" class="table-action-btn">删除</a-button>
+            <a-popconfirm title="确定要删除吗？" @confirm="handleDelete(record)">
+              <a-button size="small" type="danger" class="table-action-btn">删除</a-button>
+            </a-popconfirm>
           </template>
         </span>
       </s-table>

@@ -7,7 +7,9 @@
             <a-form-model layout="inline" :model="queryParam">
               <a-form-model-item :colon="false">
                 <a-select :default-value="columns[0].dataIndex" slot="label">
-                  <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  <template v-for="(item, index) in columns">
+                    <a-select-option v-if="index === 0 || index === 1 || index === 2" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
+                  </template>
                 </a-select>
                 <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
               </a-form-model-item>
@@ -43,71 +45,71 @@
         </span>
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
+            <a-popconfirm title="确定要删除吗？" @confirm="handleDelete(record)">
+              <a-button size="small" type="danger" class="table-action-btn">删除</a-button>
+            </a-popconfirm>
           </template>
         </span>
       </s-table>
     </a-card>
+    <a-modal v-model="isShowAddModal" title="添加">
+      <add-form></add-form>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
 import STable from '@/components/Table'
+import AddForm from './add'
 const columns = [
   {
     title: '单位编号',
-    dataIndex: 'gongsimingcheng',
+    dataIndex: 'danweibianhao',
     align: 'center',
-    width: 150
+    width: 100
   },
   {
-    title: '收货单位',
-    dataIndex: 'number',
+    title: '发货单位',
+    dataIndex: 'fahuodanwei',
     align: 'center',
     width: 120
   },
   {
-    title: '收货人',
-    dataIndex: 'kehuleixing',
+    title: '发货人',
+    dataIndex: 'fahuoren',
     align: 'center',
     width: 90
   },
   {
-    title: '收货地址',
-    dataIndex: 'duanxinbaojing',
+    title: '发货地址',
+    dataIndex: 'fahuodizhi',
     align: 'center',
-    width: 100,
+    width: 160,
     scopedSlots: { customRender: 'duanxinbaojing' }
   },
   {
     title: '所属机构',
-    dataIndex: 'duanxingshengyushuliang',
+    dataIndex: 'suoshujigou',
     align: 'center',
-    width: 120
-  },
-  {
-    title: '排序',
-    dataIndex: 'duanxingshengyushuliang',
-    align: 'center',
-    width: 120
+    width: 110
   },
   {
     title: '创建时间',
-    dataIndex: 'duanxingshengyushuliang',
+    dataIndex: 'createtime',
     align: 'center',
     width: 120
   },
   {
     title: '备注',
     dataIndex: 'beizhu',
-    align: 'center'
+    align: 'center',
+    width: 120
   },
   {
     title: '操作',
     dataIndex: 'action',
-    width: '150px',
+    width: 150,
     align: 'center',
     scopedSlots: { customRender: 'action' }
   }
@@ -115,21 +117,26 @@ const columns = [
 
 export default {
   components: {
-    STable
+    STable,
+    AddForm
   },
   data () {
     return {
       columns,
+      isShowAddModal: false,
       loadData: parameter => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve({
               data: [{
                 id: 1,
-                gongsimingcheng: 'xxxx',
-                number: '2222',
-                beizhu: '那是一种内在的东西， 他们到达不了，也无法触及的',
-                updatedAt: '2018-07-26 00:00:00'
+                danweibianhao: '1',
+                fahuodanwei: '1',
+                fahuoren: '1',
+                fahuodizhi: '北京朝阳区三环以内1',
+                suoshujigou: '000380',
+                beizhu: '',
+                createtime: '2018-07-26 00:00:00'
               }
               ],
               pageSize: 10,
@@ -151,7 +158,7 @@ export default {
       this.selectedRows = selectedRows
     },
     handleAdd () {
-
+      this.isShowAddModal = true
     }
   }
 }

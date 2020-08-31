@@ -73,6 +73,17 @@ const vueConfig = {
         javascriptEnabled: true
       }
     }
+  },
+  devServer: {
+    // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
+    proxy: {
+      '/json': {
+        target: '//www.ccsc58.com',
+        ws: false,
+        // pathRewrite: '^/',
+        changeOrigin: true
+      }
+    }
   }
 }
 

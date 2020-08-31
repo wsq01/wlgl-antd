@@ -9,20 +9,20 @@
                 <a-select :default-value="columns[0].dataIndex" slot="label">
                   <a-select-option v-for="(item, index) in columns" :key="index" :value="item.dataIndex">{{item.title}}</a-select-option>
                 </a-select>
-                <a-input v-model="queryParam.value" placeholder="" class="table-page-search-input" />
+                <a-input v-model="queryParam.value" placeholder="" style="width: 200px" />
               </a-form-model-item>
               <a-form-model-item>
                 <span class="table-page-search-btns">
                   <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button class="btn-right" @click="() => this.queryParam = {}">重置</a-button>
+                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
                 </span>
               </a-form-model-item>
             </a-form-model>
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-btns" style="float: right">
-              <a-button class="btn-right" type="primary" icon="plus" @click="handleAdd">新增</a-button>
-              <a-button v-if="selectedRowKeys.length > 0" class="btn-right" type="primary" icon="plus" @click="handleAdd">批量删除</a-button>
+              <a-button type="primary" icon="plus" @click="handleAdd">导出</a-button>
+              <a-button style="margin-left: 8px" type="primary" icon="plus" @click="handleAdd">新增</a-button>
             </span>
           </a-col>
         </a-row>
@@ -38,63 +38,78 @@
         :alert="false"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
         <span slot="action" slot-scope="text, record">
           <template>
             <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
-            <a-button size="small" type="danger" @click="handleSub(record)" class="table-action-btn">删除</a-button>
+            <a-popconfirm title="确定要删除吗？" @confirm="handleDelete(record)">
+              <a-button size="small" type="danger" class="table-action-btn">删除</a-button>
+            </a-popconfirm>
           </template>
         </span>
       </s-table>
     </a-card>
+    <a-modal v-model="isShowAddModal" title="添加">
+      <add-form></add-form>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
 import STable from '@/components/Table'
+import AddForm from './add'
 const columns = [
   {
-    title: '部门名称',
-    dataIndex: 'gongsimingcheng',
+    title: '单位编号',
+    dataIndex: 'danweibianhao',
     align: 'center',
-    width: 150
+    width: 100
   },
   {
-    title: '部门编码',
-    dataIndex: 'number',
+    title: '收货单位',
+    dataIndex: 'shouhuodanwei',
     align: 'center',
     width: 120
   },
   {
-    title: '客户类型',
-    dataIndex: 'kehuleixing',
+    title: '收货人',
+    dataIndex: 'shouhuoren',
     align: 'center',
     width: 90
   },
   {
-    title: '短信报警',
-    dataIndex: 'duanxinbaojing',
+    title: '收货地址',
+    dataIndex: 'shouhuodizhi',
     align: 'center',
-    width: 100,
-    scopedSlots: { customRender: 'duanxinbaojing' }
+    width: 100
   },
   {
-    title: '短信剩余条数',
-    dataIndex: 'duanxingshengyushuliang',
+    title: '所属机构',
+    dataIndex: 'suoshujigou',
+    align: 'center',
+    width: 110
+  },
+  {
+    title: '排序',
+    dataIndex: 'paixu',
+    align: 'center',
+    width: 60
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'createtime',
     align: 'center',
     width: 120
   },
   {
     title: '备注',
     dataIndex: 'beizhu',
-    align: 'center'
+    align: 'center',
+    width: 100
   },
   {
     title: '操作',
     dataIndex: 'action',
-    width: 160,
+    width: '150px',
     align: 'center',
     scopedSlots: { customRender: 'action' }
   }
@@ -102,21 +117,27 @@ const columns = [
 
 export default {
   components: {
-    STable
+    STable,
+    AddForm
   },
   data () {
     return {
       columns,
+      isShowAddModal: false,
       loadData: parameter => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve({
               data: [{
                 id: 1,
-                gongsimingcheng: '500359',
-                number: '000380003',
-                beizhu: '',
-                kehuleixing: '0'
+                danweibianhao: '1',
+                shouhuodanwei: '1',
+                shouhuoren: '1',
+                shouhuodizhi: '北京朝阳区三环以内1',
+                suoshujigou: '000380',
+                paixu: '0',
+                beizhu: '1',
+                createtime: '2018-07-26 00:00:00'
               }
               ],
               pageSize: 10,
@@ -138,7 +159,7 @@ export default {
       this.selectedRows = selectedRows
     },
     handleAdd () {
-
+      this.isShowAddModal = true
     }
   }
 }

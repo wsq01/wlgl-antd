@@ -37,14 +37,12 @@
         :alert="false"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a-button size="small" type="primary" @click="handleEdit(record)" class="table-action-btn">编辑</a-button>
+            <a-popconfirm title="确定要删除吗？" @confirm="handleDelete(record)">
+              <a-button size="small" type="danger" class="table-action-btn">删除</a-button>
+            </a-popconfirm>
           </template>
         </span>
       </s-table>

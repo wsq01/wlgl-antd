@@ -26,5 +26,8 @@ export default {
   title: '温度监控平台',
   pwa: false,
   iconfontUrl: '',
-  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true'
+  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
+  baseUrl: {
+    default: '//www.ccsc58.com'
+  }
 }
