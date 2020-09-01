@@ -61,11 +61,15 @@
         </span>
       </s-table>
     </a-card>
+    <a-modal v-model="isShowAddModal" title="添加" :width="900" :centered="true">
+      <add-form></add-form>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
 import STable from '@/components/Table'
+import AddForm from './add'
 const columns = [
   {
     title: '设备编号',
@@ -146,11 +150,13 @@ const columns = [
 
 export default {
   components: {
-    STable
+    STable,
+    AddForm
   },
   data () {
     return {
       columns,
+      isShowAddModal: false,
       loadData: parameter => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -188,7 +194,7 @@ export default {
       this.selectedRows = selectedRows
     },
     handleAdd () {
-
+      this.isShowAddModal = true
     }
   }
 }

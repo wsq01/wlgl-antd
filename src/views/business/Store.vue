@@ -65,9 +65,7 @@
       :after-visible-change="afterVisibleChange"
       @close="bindCloseDrawer"
     >
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      <a-tree></a-tree>
     </a-drawer>
   </div>
 </template>
