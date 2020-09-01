@@ -58,20 +58,33 @@
       </div>
     </page-header-wrapper>
     <a-drawer
-      title="Basic Drawer"
+      title="企业机构目录"
       placement="right"
       :closable="false"
       :visible="isShowDrawer"
-      :after-visible-change="afterVisibleChange"
       @close="bindCloseDrawer"
     >
-      <a-tree></a-tree>
+      <a-input-search @change="bindSearchTreeNode"></a-input-search>
+      <a-tree :show-line="treeOption.showLine" @expand="bindExpand" :expanded-keys="treeOption.expandedKeys" :auto-expand-parent="treeOption.autoExpandParent" :tree-data="treeList" @select="bindSelectTreeNode">
+        <template slot="title" slot-scope="{ title }">
+          <span v-if="title.indexOf(searchTreeValue) > -1">
+            {{ title.substr(0, title.indexOf(searchTreeValue)) }}
+            <span style="color: #f50">{{ searchTreeValue }}</span>
+            {{ title.substr(title.indexOf(searchTreeValue) + searchTreeValue.length) }}
+          </span>
+          <span v-else>{{ title }}</span>
+        </template>
+      </a-tree>
     </a-drawer>
+    <a-modal v-model="isShowAddModal" title="添加">
+      <add-form></add-form>
+    </a-modal>
   </div>
 </template>
 
 <script>
 import STable from '@/components/Table'
+import AddForm from './add'
 const columns = [
   {
     title: '库区编码',
@@ -106,7 +119,7 @@ const columns = [
   },
   {
     title: '创建时间',
-    dataIndex: 'duanxingshengyushuliang',
+    dataIndex: 'createtime',
     align: 'center',
     width: 120
   },
@@ -121,7 +134,8 @@ const columns = [
 
 export default {
   components: {
-    STable
+    STable,
+    AddForm
   },
   data () {
     return {
@@ -149,7 +163,59 @@ export default {
       queryParam: {},
       selectedRowKeys: [],
       selectedRows: [],
-      isShowDrawer: false
+      isShowDrawer: false,
+      isShowAddModal: false,
+      treeOption: {
+        autoExpandParent: false,
+        showLine: true,
+        expandedKeys: []
+      },
+      searchTreeValue: '',
+      treeList: [
+        {
+          title: '鲜盾管家',
+          key: '鲜盾管家',
+          scopedSlots: { title: 'title' },
+          children: [
+            {
+              title: '500335',
+              key: '500335',
+              scopedSlots: { title: 'title' }
+            },
+            {
+              title: '500006',
+              key: '500006',
+              scopedSlots: { title: 'title' }
+            },
+            {
+              title: '500004',
+              key: '500004',
+              scopedSlots: { title: 'title' }
+            },
+            {
+              title: '500337',
+              key: '500337',
+              scopedSlots: { title: 'title' }
+            },
+            {
+              title: '500671',
+              key: '500671',
+              scopedSlots: { title: 'title' }
+            },
+            {
+              title: '500379',
+              key: '500379',
+              scopedSlots: { title: 'title' },
+              children: [
+                { title: '500370', key: '500370', scopedSlots: { title: 'title' } },
+                { title: '500374', key: '500374', scopedSlots: { title: 'title' } },
+                { title: '500373', key: '500373', scopedSlots: { title: 'title' } }
+              ]
+            }
+          ]
+        }
+      ],
+      dataList: []
     }
   },
   methods: {
@@ -164,8 +230,54 @@ export default {
       this.isShowDrawer = !this.isShowDrawer
     },
     handleAdd () {
-
+      this.isShowAddModal = true
+    },
+    bindSelectTreeNode (selectedKeys) {
+      console.log(selectedKeys)
+    },
+    bindExpand (expandedKeys) {
+      this.$set(this.treeOption, 'autoExpandParent', false)
+      this.$set(this.treeOption, 'expandedKeys', expandedKeys)
+    },
+    getParentKey (key, tree) {
+      let parentKey
+      for (let i = 0; i < tree.length; i++) {
+        const node = tree[i]
+        if (node.children) {
+          if (node.children.some(item => item.key === key)) {
+            parentKey = node.key
+          } else if (this.getParentKey(key, node.children)) {
+            parentKey = this.getParentKey(key, node.children)
+          }
+        }
+      }
+      return parentKey
+    },
+    bindSearchTreeNode (e) {
+      const value = e.target.value
+      const expandedKeys = this.dataList.map(item => {
+        if (item.title.indexOf(value) > -1) {
+          return this.getParentKey(item.key, this.treeList)
+        }
+        return null
+      }).filter((item, i, self) => item && self.indexOf(item) === i)
+      this.$set(this.treeOption, 'autoExpandParent', true)
+      this.$set(this.treeOption, 'expandedKeys', expandedKeys)
+      this.searchTreeValue = value
+    },
+    generateList (data) {
+      for (let i = 0; i < data.length; i++) {
+        const node = data[i]
+        const key = node.key
+        this.dataList.push({ key, title: key })
+        if (node.children) {
+          this.generateList(node.children)
+        }
+      }
     }
+  },
+  created () {
+    this.generateList(this.treeList)
   }
 }
 </script>

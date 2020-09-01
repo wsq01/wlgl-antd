@@ -108,7 +108,7 @@ export const asyncRouterMap = [
             meta: {
               title: '库区管理'
             },
-            component: () => import('@/views/business/Store')
+            component: () => import('@/views/business/Store/index')
           },
           {
             path: '/business/batch',
